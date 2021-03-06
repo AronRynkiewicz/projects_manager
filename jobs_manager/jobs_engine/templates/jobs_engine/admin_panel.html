@@ -7,5 +7,18 @@
 <body>
 {% include 'accounts/logout.html' %}
 Admin panel
+    <div class="manage_clients">
+        <form method="post", action="{% url 'jobs_engine:manage_clients' %}">
+          {% csrf_token %}
+          <button type="submit">Manage Clients</button>
+        </form>
+    </div>
+
+    <div class="manage_employees">
+        <form method="post", action="{% url 'jobs_engine:manage_employees' %}">
+          {% csrf_token %}
+          <button type="submit">Manage Employees</button>
+        </form>
+    </div>
 </body>
 </html>
