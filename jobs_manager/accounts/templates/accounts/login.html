@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/login_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main_animation.css' %}">
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+{% include 'accounts/logout.html' %}
+    {% if request.user.is_authenticated %}
+    <div class="already_logged">
+            {% csrf_token %}
+            <h2>Your are already logged in!</h2>
+            <form method="post", action="/">
+                {% csrf_token %}
+                <button type="submit">Back to the main page</button>
+            </form>
+    </div>
+    {% else %}
+    <div class="main">
+            <h2>Please log in</h2>
+            <form method="post">
+                  {% csrf_token %}
+                  {{form.as_p}}
+                  <button type="submit">Login</button>
+            </form>
+    </div>
+    {% endif %}
+</body>
+<script>
+    $(function(){
+        if (!{{valid}}) {
+            $('.main').css('height', '250px');
+            $('.main').css('margin-top', '-125px');
+        }
+    });
+</script>
+</html>

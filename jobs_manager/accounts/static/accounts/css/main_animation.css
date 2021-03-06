@@ -1,0 +1,6 @@
+@keyframes main_animation{
+    from {opacity: 0;}
+    to {opacity: 1;}
+    from {top: 55%;}
+    to {top: 50%;}
+}

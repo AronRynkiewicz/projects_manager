@@ -1,0 +1,31 @@
+.main {
+    vertical-align: middle;
+    text-align: center;
+    height: 200px;
+    width: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -100px;
+    background: white;
+    animation-name: main_animation;
+    animation-duration: 1.5s;
+}
+body {
+    background-color: rgb(0, 0, 55);
+}
+
+.already_logged {
+    vertical-align: middle;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    color: white;
+    height: 200px;
+    width: 600px;
+    margin-left: -300px;
+    margin-top: -100px;
+    font-size: 200%;
+}
