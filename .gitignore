@@ -1,3 +1,6 @@
+commands.txt
+initial_data.json
+.env
 django_secrets.py
 migrations
 *.json

@@ -7,18 +7,24 @@
 <body>
 {% include 'accounts/logout.html' %}
 Admin panel
-    <div class="manage_clients">
-        <form method="post", action="{% url 'jobs_engine:manage_clients' %}">
+    <div class="create_credentials">
+        <form method="post", action="{% url 'jobs_engine:create_credentials' %}">
           {% csrf_token %}
-          <button type="submit">Manage Clients</button>
+          <button type="submit">Create user</button>
         </form>
     </div>
+Clients: <br>
+{% for client in clients %}
+    Name: {{client.profile.name}} <br>
+    Surname: {{client.profile.surname}} <br>
+    ------------------------- <br>
+{% endfor %}
 
-    <div class="manage_employees">
-        <form method="post", action="{% url 'jobs_engine:manage_employees' %}">
-          {% csrf_token %}
-          <button type="submit">Manage Employees</button>
-        </form>
-    </div>
+Employees: <br>
+{% for employee in employees %}
+    Name: {{employee.profile.name}} <br>
+    Surname: {{employee.profile.surname}} <br>
+    ------------------------- <br>
+{% endfor %}
 </body>
 </html>
