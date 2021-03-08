@@ -25,7 +25,7 @@ class Profile(models.Model):
         ('Client', 'Client'),
         ('Employee', 'Employee'),
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     role = models.CharField(choices=possible_roles, max_length=20)
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=50)

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
+    <body>
+        {% if request.user.is_superuser %}
+            <form method="post", action="{% url 'jobs_engine:create_user' %}">
+                {{user_form.as_p}}
+                {{profile_form.as_p}}
+                {% csrf_token %}
+                <button type="submit">Create user</button>
+            </form>
+        {% endif %}
+    </body>
+</html>

@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import *
@@ -12,10 +13,12 @@ def index(request):
     if request.user.is_superuser:
         return redirect('jobs_engine:admin_panel')
 
-    if request.user.is_client:
+    profile_obj = Profile.objects.get(user=request.user)
+
+    if profile_obj.role == 'Client':
         return redirect('jobs_engine:client_view')
 
-    if not request.user.is_client:
+    if profile_obj.role == 'Employee':
         return redirect('jobs_engine:employee_view')
 
     context = {}
@@ -30,44 +33,30 @@ def admin_panel(request):
         }
         return render(request, 'jobs_engine/admin_panel.html', context)
     else:
-        return redirect('jobs_engine/index.html')
+        return redirect('/')
 
 
 def client_view(request):
-    return render(request, 'Client view')
+    return HttpResponse('Client view')
 
 
 def employee_view(request):
-    return render(request, 'Employee view')
+    return HttpResponse('Employee view')
 
 
-def create_credentials(request):
+def create_user(request):
     if request.user.is_superuser:
-        form = UserCreationForm()
+        user_form = UserCreationForm()
+        profile_form = ProfileForm()
 
         if request.method == 'POST':
-            form = UserCreationForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('jobs_engine:create_profile')
-
-        context = {
-            'form': form,
-        }
-
-        return render(request, 'jobs_engine/create_credentials.html', context)
-    else:
-        return redirect('jobs_engine/index.html')
-
-
-def create_profile(request):
-    if request.user.is_superuser:
-        form = ProfileForm()
-
-        if request.method == 'POST':
-            form = ProfileForm(request.POST)
-            if form.is_valid():
-                profile_obj = form.save()
+            user_form = UserCreationForm(request.POST)
+            profile_form = ProfileForm(request.POST)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_obj = user_form.save()
+                profile_obj = profile_form.save()
+                profile_obj.user = user_obj
+                profile_obj.save()
 
                 if profile_obj.role == 'Client':
                     obj, created = Client.objects.get_or_create(
@@ -80,14 +69,15 @@ def create_profile(request):
                     )
                 return redirect('/')
         context = {
-            'form': form,
+            'user_form': user_form,
+            'profile_form': profile_form,
         }
-        return render(request, 'jobs_engine/create_profile.html', context)
+        return render(request, 'jobs_engine/create_user.html', context)
     else:
-        return redirect('jobs_engine/index.html')
+        return redirect('/')
 
 
-def manage_clients(request):
+def manage_users(request):
     if request.user.is_superuser:
         client_form = ClientForm()
         user_form = UserForm()
@@ -98,14 +88,6 @@ def manage_clients(request):
             'client_form': client_form,
             'profile_form': profile_form,
         }
-        return render(request, 'jobs_engine/manage_clients.html', context)
+        return render(request, 'jobs_engine/manage_users.html', context)
     else:
-        return redirect('jobs_engine/index.html')
-
-
-def manage_employees(request):
-    if request.user.is_superuser:
-        context = {}
-        return render(request, 'jobs_engine/manage_employees.html')
-    else:
-        return redirect('jobs_engine/index.html')
+        return redirect('/')

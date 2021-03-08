@@ -12,7 +12,8 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ('user',)
 
 
 class ClientForm(forms.ModelForm):

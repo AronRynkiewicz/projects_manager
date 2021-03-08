@@ -7,8 +7,8 @@
 <body>
 {% include 'accounts/logout.html' %}
 Admin panel
-    <div class="create_credentials">
-        <form method="post", action="{% url 'jobs_engine:create_credentials' %}">
+    <div class="create_user">
+        <form method="post", action="{% url 'jobs_engine:create_user' %}">
           {% csrf_token %}
           <button type="submit">Create user</button>
         </form>
