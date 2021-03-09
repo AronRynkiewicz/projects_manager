@@ -47,11 +47,11 @@ def employee_view(request):
 def create_user(request):
     if request.user.is_superuser:
         user_form = UserCreationForm()
-        profile_form = ProfileForm()
+        profile_form = ProfileForm(created=True)
 
         if request.method == 'POST':
             user_form = UserCreationForm(request.POST)
-            profile_form = ProfileForm(request.POST)
+            profile_form = ProfileForm(request.POST, created=True)
             if user_form.is_valid() and profile_form.is_valid():
                 user_obj = user_form.save()
                 profile_obj = profile_form.save()
@@ -77,17 +77,40 @@ def create_user(request):
         return redirect('/')
 
 
-def manage_users(request):
+def update_user(request, pk):
     if request.user.is_superuser:
-        client_form = ClientForm()
-        user_form = UserForm()
-        profile_form = ProfileForm()
+        client = Client.objects.filter(id=pk)
+        if client:
+            role = 'client'
+            client = client[0]
+            profile_form = ProfileForm(instance=client.profile)
+            employee_form = None
+        else:
+            role = 'employee'
+            employee = Employee.objects.get(id=pk)
+            profile_form = ProfileForm(instance=employee.profile)
+            employee_form = EmployeeForm(instance=employee)
+
+        if request.method == 'POST':
+            if role == 'client':
+                profile_form = ProfileForm(request.POST, instance=client.profile)
+            if role == 'employee':
+                profile_form = ProfileForm(request.POST, instance=employee.profile)
+                employee_form = EmployeeForm(request.POST, instance=employee)
+
+            if profile_form.is_valid():
+                profile_form.save()
+                if employee_form:
+                    if employee_form.is_valid():
+                        employee_form.save()
+                        return redirect('/')
+                else:
+                    return redirect('/')
 
         context = {
-            'user_form': user_form,
-            'client_form': client_form,
-            'profile_form': profile_form,
+            'form': profile_form,
+            'employee_form': employee_form,
         }
-        return render(request, 'jobs_engine/manage_users.html', context)
+        return render(request, 'jobs_engine/update_user.html', context)
     else:
         return redirect('/')

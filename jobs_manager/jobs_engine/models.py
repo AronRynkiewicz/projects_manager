@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+import uuid
 
 
 # Create your models here.
@@ -21,6 +20,7 @@ class Position(models.Model):
 
 
 class Profile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     possible_roles = (
         ('Client', 'Client'),
         ('Employee', 'Employee'),
@@ -40,6 +40,7 @@ class Profile(models.Model):
 
 
 class Employee(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     position = models.OneToOneField(
         Position,
@@ -54,6 +55,7 @@ class Employee(models.Model):
 
 
 class Team(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     team_name = models.CharField(max_length=50)
     members = models.ForeignKey(
         Employee,
@@ -66,6 +68,7 @@ class Team(models.Model):
 
 
 class File(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file_name = models.CharField(max_length=50)
     creation_date = models.DateField(auto_now_add=True)
     file = models.FileField(upload_to='client_files/')
@@ -75,6 +78,7 @@ class File(models.Model):
 
 
 class Task(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     task_name = models.CharField(max_length=50)
     task_description = models.TextField()
     assigned_team = models.ForeignKey(
@@ -93,6 +97,7 @@ class Task(models.Model):
 
 
 class Client(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     task = models.ForeignKey(
         Task,
@@ -105,14 +110,3 @@ class Client(models.Model):
             self.profile.name,
             self.profile.surname
         )
-
-
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-#
-#
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()

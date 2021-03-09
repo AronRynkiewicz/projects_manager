@@ -9,5 +9,5 @@ urlpatterns = [
     path('client_view', views.client_view, name='client_view'),
     path('employee_view', views.employee_view, name='employee_view'),
     path('create_user', views.create_user, name='create_user'),
-    path('manage_users', views.manage_users, name='manage_users'),
+    path('update_user/<str:pk>/', views.update_user, name='update_user'),
 ]

@@ -10,10 +10,15 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        created = kwargs.pop('created', False)
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        if not created:
+            self.fields.pop('role')
+
     class Meta:
         model = Profile
-        # fields = '__all__'
-        exclude = ('user',)
+        exclude = ('user', )
 
 
 class ClientForm(forms.ModelForm):
@@ -25,4 +30,4 @@ class ClientForm(forms.ModelForm):
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = '__all__'
+        fields = ('position', )

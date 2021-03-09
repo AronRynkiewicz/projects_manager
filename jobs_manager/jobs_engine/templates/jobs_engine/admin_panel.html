@@ -17,6 +17,7 @@ Clients: <br>
 {% for client in clients %}
     Name: {{client.profile.name}} <br>
     Surname: {{client.profile.surname}} <br>
+    <a href="{% url 'jobs_engine:update_user' client.id %}">Update user</a><br>
     ------------------------- <br>
 {% endfor %}
 
@@ -24,6 +25,8 @@ Employees: <br>
 {% for employee in employees %}
     Name: {{employee.profile.name}} <br>
     Surname: {{employee.profile.surname}} <br>
+    Role: {{employee.position.position_name}} <br>
+    <a href="{% url 'jobs_engine:update_user' employee.id %}">Update user</a><br>
     ------------------------- <br>
 {% endfor %}
 </body>
