@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete user</title>
+</head>
+    <body>
+        <p>This action will permanently delete "{{profile_obj.name}} {{profile_obj.surname}}" user! Do you want to proceed?</p>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <button type="submit">Delete user</button>
+            </form>
+            <a href="{% url 'jobs_engine:index' %}">Cancel</a>
+    </body>
+</html>

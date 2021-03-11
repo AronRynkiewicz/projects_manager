@@ -18,6 +18,7 @@ Clients: <br>
     Name: {{client.profile.name}} <br>
     Surname: {{client.profile.surname}} <br>
     <a href="{% url 'jobs_engine:update_user' client.id %}">Update user</a><br>
+    <a href="{% url 'jobs_engine:delete_user' client.id %}">Delete user</a><br>
     ------------------------- <br>
 {% endfor %}
 
@@ -27,6 +28,7 @@ Employees: <br>
     Surname: {{employee.profile.surname}} <br>
     Role: {{employee.position.position_name}} <br>
     <a href="{% url 'jobs_engine:update_user' employee.id %}">Update user</a><br>
+    <a href="{% url 'jobs_engine:delete_user' employee.id %}">Delete user</a><br>
     ------------------------- <br>
 {% endfor %}
 </body>

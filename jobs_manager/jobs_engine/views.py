@@ -114,3 +114,28 @@ def update_user(request, pk):
         return render(request, 'jobs_engine/update_user.html', context)
     else:
         return redirect('/')
+
+
+def delete_user(request, pk):
+    if request.user.is_superuser:
+        client = Client.objects.filter(id=pk)
+        if client:
+            client = client[0]
+            profile_obj = Profile.objects.get(id=client.profile.id)
+            user_obj = User.objects.get(id=client.profile.user.id)
+            main_obj = client
+        else:
+            employee = Employee.objects.get(id=pk)
+            profile_obj = Profile.objects.get(id=employee.profile.id)
+            user_obj = User.objects.get(id=employee.profile.user.id)
+            main_obj = employee
+
+        if request.method == 'POST':
+            main_obj.delete()
+            profile_obj.delete()
+            user_obj.delete()
+            return redirect('/')
+        context = {'profile_obj': profile_obj}
+        return render(request, 'jobs_engine/delete_user.html', context)
+    else:
+        return redirect('/')
