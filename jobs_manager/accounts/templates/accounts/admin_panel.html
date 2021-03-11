@@ -8,7 +8,7 @@
 {% include 'accounts/logout.html' %}
 Admin panel
     <div class="create_user">
-        <form method="post", action="{% url 'jobs_engine:create_user' %}">
+        <form method="post", action="{% url 'accounts:create_user' %}">
           {% csrf_token %}
           <button type="submit">Create user</button>
         </form>
@@ -17,8 +17,8 @@ Clients: <br>
 {% for client in clients %}
     Name: {{client.profile.name}} <br>
     Surname: {{client.profile.surname}} <br>
-    <a href="{% url 'jobs_engine:update_user' client.id %}">Update user</a><br>
-    <a href="{% url 'jobs_engine:delete_user' client.id %}">Delete user</a><br>
+    <a href="{% url 'accounts:update_user' client.id %}">Update user</a><br>
+    <a href="{% url 'accounts:delete_user' client.id %}">Delete user</a><br>
     ------------------------- <br>
 {% endfor %}
 
@@ -27,8 +27,8 @@ Employees: <br>
     Name: {{employee.profile.name}} <br>
     Surname: {{employee.profile.surname}} <br>
     Role: {{employee.position.position_name}} <br>
-    <a href="{% url 'jobs_engine:update_user' employee.id %}">Update user</a><br>
-    <a href="{% url 'jobs_engine:delete_user' employee.id %}">Delete user</a><br>
+    <a href="{% url 'accounts:update_user' employee.id %}">Update user</a><br>
+    <a href="{% url 'accounts:delete_user' employee.id %}">Delete user</a><br>
     ------------------------- <br>
 {% endfor %}
 </body>

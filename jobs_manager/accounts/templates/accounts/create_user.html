@@ -6,7 +6,7 @@
 </head>
     <body>
         {% if request.user.is_superuser %}
-            <form method="post", action="{% url 'jobs_engine:create_user' %}">
+            <form method="post", action="{% url 'accounts:create_user' %}">
                 {{user_form.as_p}}
                 {{profile_form.as_p}}
                 {% csrf_token %}
