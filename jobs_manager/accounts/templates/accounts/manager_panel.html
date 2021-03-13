@@ -20,13 +20,13 @@
 
         Your teams: <br>
         {% for team in teams %}
-            Team name: {{team.team_name}} <br>
+            Team name: {{team.0.team_name}} <br>
             Members: <br>
-            {% for member in members %}
+            {% for member in team.1 %}
                 Name: {{member.profile.name}} <br>
                 Surname: {{member.profile.surname}} <br>
             {% endfor %}
-             <a href="{% url 'accounts:update_team' team.id %}">Update team</a><br>
+            <a href="{% url 'accounts:update_team' team.0.id %}">Update team</a><br>
         {% endfor %}
 
         Your tasks: <br>

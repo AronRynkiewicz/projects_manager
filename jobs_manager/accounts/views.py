@@ -48,16 +48,21 @@ def manager_panel(request):
 
     if employee_obj.position.position_name == 'Manager':
         teams_lst = [team.id.__str__() for team in employee_obj.teams.all()]
-        members = Employee.objects.filter(teams__id__in=teams_lst)
+        teams = []
+        for id in teams_lst:
+            team = Team.objects.filter(id=id)[0]
+            employees = Employee.objects.filter(teams__id=id)
+            teams.append([
+                team,
+                employees,
+            ])
 
-        teams = Team.objects.filter(id__in=teams_lst)
         tasks = Task.objects.filter(assigned_team__in=teams_lst)
         available_tasks = Task.objects.filter(assigned_team=None)
 
         context = {
             'tasks': tasks,
             'teams': teams,
-            'members': members,
             'available_tasks': available_tasks,
         }
         return render(request, 'accounts/manager_panel.html', context)
@@ -106,7 +111,7 @@ def update_team(request, pk):
         form = TeamForm(instance=team, manager_id=request.session.get('employee_id'))
 
         original_members = Employee.objects.filter(teams__id=team.id)
-        members = [member.id.__str__() for member in original_members]
+        members = [member.id.__str__() for member in original_members if member.id != employee_obj.id]
         json_members = json.dumps(members)
         members = set(members)
 
