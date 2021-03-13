@@ -5,7 +5,7 @@ from jobs_engine.models import *
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = fields = ('username', 'password')
+        fields = ('username', 'password')
 
 
 class ProfileForm(forms.ModelForm):
@@ -33,10 +33,13 @@ class EmployeeForm(forms.ModelForm):
 
 
 class TeamForm(forms.ModelForm):
-    members = forms.ModelMultipleChoiceField(
-        queryset=Employee.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-    )
+    def __init__(self, *args, **kwargs):
+        members = forms.ModelMultipleChoiceField(
+            queryset=Employee.objects.all().exclude(id=kwargs.pop('manager_id', None)),
+            widget=forms.CheckboxSelectMultiple,
+        )
+        super(TeamForm, self).__init__(*args, **kwargs)
+        self.fields['members'] = members
 
     class Meta:
         model = Team

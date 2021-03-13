@@ -72,13 +72,16 @@ def create_team(request):
     employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
 
     if employee_obj.position.position_name == 'Manager':
-        form = TeamForm()
+        form = TeamForm(manager_id=request.session.get('employee_id'))
 
         if request.method == 'POST':
-            form = TeamForm(request.POST)
+            form = TeamForm(request.POST, manager_id=request.session.get('employee_id'))
 
             if form.is_valid():
                 team = form.save()
+
+                employee_obj.teams.add(team)
+                employee_obj.save()
 
                 for member in form.cleaned_data['members']:
                     member.teams.add(team)
@@ -100,7 +103,7 @@ def update_team(request, pk):
 
     if employee_obj.position.position_name == 'Manager':
         team = Team.objects.get(id=pk)
-        form = TeamForm(instance=team)
+        form = TeamForm(instance=team, manager_id=request.session.get('employee_id'))
 
         original_members = Employee.objects.filter(teams__id=team.id)
         members = [member.id.__str__() for member in original_members]
@@ -108,7 +111,7 @@ def update_team(request, pk):
         members = set(members)
 
         if request.method == 'POST':
-            form = TeamForm(request.POST, instance=team)
+            form = TeamForm(request.POST, instance=team, manager_id=request.session.get('employee_id'))
 
             if form.is_valid():
                 new_members = set([member.id.__str__() for member in form.cleaned_data['members']])
