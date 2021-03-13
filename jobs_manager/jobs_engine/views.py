@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from .models import *
 
 
@@ -29,6 +28,11 @@ def client_view(request):
 
 
 def employee_view(request):
-    return HttpResponse('Employee view')
+    employee_obj = Employee.objects.get(profile__user=request.user)
+    request.session['employee_id'] = employee_obj.id.__str__()
 
+    if employee_obj.position.position_name == 'Employee':
+        return HttpResponse('Employee view')
 
+    if employee_obj.position.position_name == 'Manager':
+        return redirect('accounts:manager_panel')

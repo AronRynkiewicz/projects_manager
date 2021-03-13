@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manger panel</title>
+</head>
+    <body>
+        <div class="create_team">
+            <form method="post", action="{% url 'accounts:create_team'%}">
+              {% csrf_token %}
+              <button type="submit">Create team</button>
+            </form>
+        </div>
+        {% if available_tasks %}
+            Available Task(s): <br>
+            {% for task in available_tasks %}
+                Name: {{task.task_name}} <br>
+            {% endfor %}
+        {% endif %}
+
+        Your teams: <br>
+        {% for team in teams %}
+            Team name: {{team.team_name}} <br>
+            Members: <br>
+            {% for member in members %}
+                Name: {{member.profile.name}} <br>
+                Surname: {{member.profile.surname}} <br>
+            {% endfor %}
+        {% endfor %}
+
+        Your tasks: <br>
+        {% for task in tasks %}
+            Task name: {{task.task_name}} <br>
+            Team(s): <br>
+            {% for team in task.assigned_teams %}
+                Name: {{team.team_name}} <br>
+            {% endfor %}
+        {% endfor %}
+    </body>
+</html>

@@ -39,12 +39,23 @@ class Profile(models.Model):
         )
 
 
+class Team(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    team_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return '(Team) {}'.format(self.team_name)
+
+
 class Employee(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    position = models.OneToOneField(
+    position = models.ForeignKey(
         Position,
         on_delete=models.CASCADE,
+    )
+    teams = models.ManyToManyField(
+        Team,
     )
 
     def __str__(self):
@@ -52,19 +63,6 @@ class Employee(models.Model):
             self.profile.name,
             self.profile.surname,
         )
-
-
-class Team(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    team_name = models.CharField(max_length=50)
-    members = models.ForeignKey(
-        Employee,
-        on_delete=models.CASCADE,
-        null=True,
-    )
-
-    def __str__(self):
-        return '(Team) {}'.format(self.team_name)
 
 
 class File(models.Model):
@@ -81,15 +79,11 @@ class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     task_name = models.CharField(max_length=50)
     task_description = models.TextField()
-    assigned_team = models.ForeignKey(
+    assigned_team = models.ManyToManyField(
         Team,
-        on_delete=models.CASCADE,
-        null=True,
     )
-    files = models.ForeignKey(
+    files = models.ManyToManyField(
         File,
-        on_delete=models.CASCADE,
-        null=True,
     )
 
     def __str__(self):
@@ -99,10 +93,8 @@ class Task(models.Model):
 class Client(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    task = models.ForeignKey(
+    task = models.ManyToManyField(
         Task,
-        on_delete=models.CASCADE,
-        null=True,
     )
 
     def __str__(self):

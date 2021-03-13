@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create team</title>
+</head>
+    <body>
+        <form method="post", action="{% url 'accounts:create_team' %}">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">Create team</button>
+        </form>
+    </body>
+</html>

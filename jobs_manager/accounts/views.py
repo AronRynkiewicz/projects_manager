@@ -39,6 +39,59 @@ def admin_panel(request):
         return redirect('/')
 
 
+def manager_panel(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+
+    if employee_obj.position.position_name == 'Manager':
+        teams_lst = [team.id.__str__() for team in employee_obj.teams.all()]
+        members = Employee.objects.filter(teams__id__in=teams_lst)
+
+        teams = Team.objects.filter(id__in=teams_lst)
+        tasks = Task.objects.filter(assigned_team__in=teams_lst)
+        available_tasks = Task.objects.filter(assigned_team=None)
+
+        context = {
+            'tasks': tasks,
+            'teams': teams,
+            'members': members,
+            'available_tasks': available_tasks,
+        }
+        return render(request, 'accounts/manager_panel.html', context)
+
+    return redirect('/')
+
+
+def create_team(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+
+    if employee_obj.position.position_name == 'Manager':
+        form = TeamForm()
+
+        if request.method == 'POST':
+            form = TeamForm(request.POST)
+
+            if form.is_valid():
+                team = form.save()
+
+                for member in form.cleaned_data['members']:
+                    member.teams.add(team)
+                    member.save()
+
+                return redirect('/')
+
+        context = {'form': form}
+
+        return render(request, 'accounts/create_team.html', context)
+
+    return redirect('/')
+
+
 def create_user(request):
     if request.user.is_superuser:
         user_form = UserCreationForm()

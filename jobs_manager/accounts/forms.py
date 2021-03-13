@@ -30,3 +30,14 @@ class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ('position', )
+
+
+class TeamForm(forms.ModelForm):
+    members = forms.ModelMultipleChoiceField(
+        queryset=Employee.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+    class Meta:
+        model = Team
+        fields = ('team_name', )
