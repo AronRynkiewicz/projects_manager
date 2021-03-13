@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import *
+import json
 
 
 def login_view(request):
@@ -89,6 +90,46 @@ def create_team(request):
 
         return render(request, 'accounts/create_team.html', context)
 
+    return redirect('/')
+
+
+def update_team(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+    employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+
+    if employee_obj.position.position_name == 'Manager':
+        team = Team.objects.get(id=pk)
+        form = TeamForm(instance=team)
+
+        original_members = Employee.objects.filter(teams__id=team.id)
+        members = [member.id.__str__() for member in original_members]
+        json_members = json.dumps(members)
+        members = set(members)
+
+        if request.method == 'POST':
+            form = TeamForm(request.POST, instance=team)
+
+            if form.is_valid():
+                new_members = set([member.id.__str__() for member in form.cleaned_data['members']])
+                added_members = new_members.difference(new_members.intersection(members))
+                removed_members = members.difference(members.intersection(new_members))
+
+                for member in form.cleaned_data['members']:
+                    if member.id.__str__() in added_members:
+                        member.teams.add(team)
+                        member.save()
+                for member in original_members:
+                    if member.id.__str__() in removed_members:
+                        member.teams.remove(team)
+
+                return redirect('/')
+
+        context = {
+            'form': form,
+            'members': json_members,
+        }
+        return render(request, 'accounts/update_team.html', context)
     return redirect('/')
 
 

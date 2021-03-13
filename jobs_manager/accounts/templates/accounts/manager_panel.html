@@ -26,6 +26,7 @@
                 Name: {{member.profile.name}} <br>
                 Surname: {{member.profile.surname}} <br>
             {% endfor %}
+             <a href="{% url 'accounts:update_team' team.id %}">Update team</a><br>
         {% endfor %}
 
         Your tasks: <br>
