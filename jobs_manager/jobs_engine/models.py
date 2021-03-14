@@ -66,19 +66,31 @@ class Employee(models.Model):
 
 
 class File(models.Model):
+    type_choices = (
+        ('Client\'s', 'Client\'s'),
+        ('Team\'s', 'Team\'s')
+    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file_name = models.CharField(max_length=50)
     creation_date = models.DateField(auto_now_add=True)
-    file = models.FileField(upload_to='client_files/')
+    type = models.CharField(max_length=20, choices=type_choices)
+    file = models.FileField(upload_to='files/')
 
     def __str__(self):
-        return self.file_name
+        return '({}) {}'.format(self.type, self.file_name)
 
 
 class Task(models.Model):
+    status_choices = (
+        ('Created', 'Created'),
+        ('In progress', 'In progress'),
+        ('For client review', 'For client review'),
+        ('Finished', 'Finished'),
+    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     task_name = models.CharField(max_length=50)
     task_description = models.TextField()
+    status = models.CharField(max_length=20, choices=status_choices)
     assigned_team = models.ManyToManyField(
         Team,
     )
@@ -87,7 +99,7 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return self.task_name
+        return '({}) {}'.format(self.status, self.task_name)
 
 
 class Client(models.Model):
