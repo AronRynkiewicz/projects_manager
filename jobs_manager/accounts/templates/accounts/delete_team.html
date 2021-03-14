@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete team</title>
+</head>
+    <body>
+        <p>This action will permanently delete "{{team.team_name}}" team! Do you want to proceed?</p>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <button type="submit">Delete team</button>
+            </form>
+            <a href="{% url 'accounts:manager_panel' %}">Cancel</a>
+    </body>
+</html>

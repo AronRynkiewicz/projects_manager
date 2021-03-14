@@ -27,6 +27,7 @@
                 Surname: {{member.profile.surname}} <br>
             {% endfor %}
             <a href="{% url 'accounts:update_team' team.0.id %}">Update team</a><br>
+            <a href="{% url 'accounts:delete_team' team.0.id %}">Delete team</a><br>
         {% endfor %}
 
         Your tasks: <br>

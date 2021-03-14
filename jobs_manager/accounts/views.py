@@ -141,6 +141,31 @@ def update_team(request, pk):
     return redirect('/')
 
 
+def delete_team(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+
+    if employee_obj.position.position_name == 'Manager':
+        team = Team.objects.get(id=pk)
+        if request.method == 'POST':
+            members = Employee.objects.filter(teams__id=team.id)
+
+            for member in members:
+                member.teams.remove(team)
+
+            team.delete()
+
+            return redirect('/')
+
+        context = {
+            'team': team,
+        }
+        return render(request, 'accounts/delete_team.html', context)
+    return redirect('/')
+
+
 def create_user(request):
     if request.user.is_superuser:
         user_form = UserCreationForm()
