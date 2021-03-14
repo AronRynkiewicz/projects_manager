@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create task</title>
+</head>
+    <body>
+        <form enctype="multipart/form-data", method="post", action="{% url 'jobs_engine:create_task' %}">
+            {{task_form.as_p}}
+            {{file_form.as_p}}
+            {% csrf_token %}
+            <button type="submit">Create task</button>
+        </form>
+    </body>
+</html>

@@ -90,7 +90,7 @@ class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     task_name = models.CharField(max_length=50)
     task_description = models.TextField()
-    status = models.CharField(max_length=20, choices=status_choices)
+    status = models.CharField(max_length=20, choices=status_choices, default='Created')
     assigned_team = models.ManyToManyField(
         Team,
     )
