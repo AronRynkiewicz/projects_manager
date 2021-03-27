@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your tasks</title>
+</head>
+<body>
+    {% include 'accounts/logout.html' %}
+    {% for task in tasks %}
+        Task name: {{task.task_name}} <br>
+        Task description: <br>
+        {{task.task_description|truncatechars:30}} <br>
+        More about task: <a href="{% url 'jobs_engine:single_task_view' task.id %}">View more</a><br><br>
+    {% endfor %}
+</body>
+</html>

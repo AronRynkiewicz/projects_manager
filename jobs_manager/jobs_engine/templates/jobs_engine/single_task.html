@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Single task</title>
+</head>
+<body>
+    Task name: {{task.task_name}} <br>
+    Task description: <br>
+    {{task.task_description}} <br>
+    Files:<br>
+    {% for file in task.files.all %}
+        File: <br>
+        ({{file.type}}) {{file.file_name}} <br>
+        <a  href="{% url 'jobs_engine:download' file.id %}"> Download file </a>
+    {% endfor %}
+    {{form.as_p}}
+</body>
+</html>

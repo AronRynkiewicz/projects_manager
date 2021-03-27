@@ -5,6 +5,7 @@
     <title>Manger panel</title>
 </head>
     <body>
+        {% include 'accounts/logout.html' %}
         <div class="create_team">
             <form method="post", action="{% url 'accounts:create_team'%}">
               {% csrf_token %}

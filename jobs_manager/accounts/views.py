@@ -180,6 +180,9 @@ def add_team(request, pk):
         if request.method == 'POST':
             add_team_form = TeamAdditionForm(request.POST, teams_id_lst=teams_lst)
             if add_team_form.is_valid():
+                task.status = 'In progress'
+                task.save()
+
                 for team in add_team_form.cleaned_data['teams']:
                     task.assigned_team.add(team)
                     task.save()

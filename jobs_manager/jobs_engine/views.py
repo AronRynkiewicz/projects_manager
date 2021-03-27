@@ -1,5 +1,5 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.http import FileResponse
 from .models import *
 from .forms import *
 
@@ -55,6 +55,8 @@ def create_task(request):
 
         if task_form.is_valid() and file_form.is_valid():
             file = file_form.save()
+            file.type = 'Client\'s'
+            file.save()
             task = task_form.save()
 
             task.files.add(file)
@@ -76,8 +78,43 @@ def employee_view(request):
     employee_obj = Employee.objects.get(profile__user=request.user)
     request.session['employee_id'] = employee_obj.id.__str__()
 
-    if employee_obj.position.position_name == 'Employee':
-        return HttpResponse('Employee view')
-
     if employee_obj.position.position_name == 'Manager':
         return redirect('accounts:manager_panel')
+
+    if employee_obj.position.position_name == 'Employee':
+        return redirect('jobs_engine:tasks_view')
+
+
+def tasks_view(request):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+    tasks = Task.objects.filter(assigned_team__in=employee_obj.teams.all())
+
+    context = {
+        'tasks': tasks,
+    }
+
+    return render(request, 'jobs_engine/employee_view.html', context)
+
+
+def single_task_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    task = Task.objects.get(id=pk)
+
+    context = {
+        'task': task,
+    }
+    return render(request, 'jobs_engine/single_task.html', context)
+
+
+def download(request, pk):
+    file = File.objects.get(id=pk)
+    filename = file.file.name
+    response = FileResponse(open(filename, 'rb'))
+    response['Content-Type'] = 'text/plain'
+    response['Content-Disposition'] = 'attachment; filename={}'.format(file.file_name)
+    return response
