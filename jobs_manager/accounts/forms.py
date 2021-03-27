@@ -44,3 +44,13 @@ class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = ('team_name', )
+
+
+class TeamAdditionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        teams = forms.ModelMultipleChoiceField(
+            queryset=Team.objects.filter(id__in=kwargs.pop('teams_id_lst', None)),
+            widget=forms.CheckboxSelectMultiple,
+        )
+        super(TeamAdditionForm, self).__init__(*args, **kwargs)
+        self.fields['teams'] = teams

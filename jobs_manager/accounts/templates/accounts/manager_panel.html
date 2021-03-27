@@ -15,6 +15,7 @@
             Available Task(s): <br>
             {% for task in available_tasks %}
                 Name: {{task.task_name}} <br>
+                <a href="{% url 'accounts:add_team' task.id %}">Join task</a><br>
             {% endfor %}
         {% endif %}
 
@@ -34,8 +35,8 @@
         {% for task in tasks %}
             Task name: {{task.task_name}} <br>
             Team(s): <br>
-            {% for team in task.assigned_teams %}
-                Name: {{team.team_name}} <br>
+            {% for t in task.assigned_team.all %}
+                Name: {{t.team_name}} <br>
             {% endfor %}
         {% endfor %}
     </body>

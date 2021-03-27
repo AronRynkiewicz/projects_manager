@@ -57,7 +57,7 @@ def manager_panel(request):
                 employees,
             ])
 
-        tasks = Task.objects.filter(assigned_team__in=teams_lst)
+        tasks = Task.objects.filter(assigned_team__id__in=teams_lst)
         available_tasks = Task.objects.filter(assigned_team=None)
 
         context = {
@@ -163,6 +163,33 @@ def delete_team(request, pk):
             'team': team,
         }
         return render(request, 'accounts/delete_team.html', context)
+    return redirect('/')
+
+
+def add_team(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+
+    if employee_obj.position.position_name == 'Manager':
+        task = Task.objects.get(id=pk)
+        teams_lst = [team.id.__str__() for team in employee_obj.teams.all()]
+        add_team_form = TeamAdditionForm(teams_id_lst=teams_lst)
+
+        if request.method == 'POST':
+            add_team_form = TeamAdditionForm(request.POST, teams_id_lst=teams_lst)
+            if add_team_form.is_valid():
+                for team in add_team_form.cleaned_data['teams']:
+                    task.assigned_team.add(team)
+                    task.save()
+                return redirect('/')
+
+        context = {
+            'task': task,
+            'form': add_team_form,
+        }
+        return render(request, 'accounts/add_team.html', context)
     return redirect('/')
 
 
