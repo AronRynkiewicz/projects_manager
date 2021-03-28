@@ -2,60 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
     <title>Single task</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'jobs_engine/css/single_task_style.css' %}">
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
-<body>
+<div>
     <form>
-     <input type="button" value="Back" onclick="history.back()">
+     <input type="button" class="btn btn-light" value="Back" onclick="history.back()">
     </form>
-    Task name: {{task.task_name}} <br>
-    Task status: {{task.status}} <br>
-    Task description: <br>
-    {{task.task_description}} <br>
-    Files:<br>
-    {% for file in task.files.all %}
-        ({{file.type}}) {{file.file_name}} <br>
-        <a  href="{% url 'jobs_engine:download' file.id %}"> Download file </a><br>
-    {% endfor %}
-    {% if not task.status == 'Finished' %}
-        <form method="post", action="{% url 'jobs_engine:finished_view' task.id %}">
-            {% csrf_token %}
-            {{finished_form.as_p}}
-            <button type="submit">Submit</button>
-        </form>
-    {% endif %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Task name: {{task.task_name}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Status: {{task.status}} </h6>
+            <h6>Task description:</h6>
+            {{task.task_description}} <br>
+            <h6>Files:</h6>
+            <ul class="list-group">
+                {% for file in task.files.all %}
+                    <li class="list-group-item">({{file.type}}) <a href="{% url 'jobs_engine:download' file.id %}"> {{file.file_name}} </a></li>
+                {% endfor %}
+            </ul>
+
+            {% if not task.status == 'Finished' %}
+                {% if finished_form %}
+                    <form method="post", action="{% url 'jobs_engine:finished_view' task.id %}">
+                        {% csrf_token %}
+                        {{finished_form|crispy}}
+                        <button type="submit" class="btn btn-dark">Submit</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
     {% if not task.status == 'Finished' %}
         {% if file_form %}
+            <br>
             <form enctype="multipart/form-data", method="post", action="{% url 'jobs_engine:single_task_view' task.id %}">
                 {% csrf_token %}
 
-                Add files: <br>
-                {{file_form.as_p}}
-                {{review_form.as_p}}
-                <button type="submit">Submit</button>
+                <h4>Add files:</h4>
+                {{file_form|crispy}}
+                {{review_form|crispy}}
+                <button type="submit" class="btn btn-light">Submit</button>
             </form>
+            <br>
         {% endif %}
     {% endif %}
 
-    {% if comments %}
-        Comments:<br>
-        {% for comment in comments %}
-            {% if comment.type == 'Client\'s' %}
-                <p align="right">({{comment.type}}) | {{comment.creation_date}} <br></p>
-                <p align="right">{{comment.text|rjust:20}}<br></p>
-            {% else %}
-                ({{comment.type}}) | {{comment.creation_date}} <br>
-                {{comment.text}} <br>
-            {% endif %}
-        {% endfor %}
+    {% if not task.status == 'Finished' %}
+        <div class="comment">
+            <form method="post", action="{% url 'jobs_engine:comment_view' task.id %}">
+                {% csrf_token %}
+                <h4>Your comment:</h4>
+                {{comment_form|crispy}}
+                <button type="submit" class="btn btn-light">Submit</button>
+            </form>
+        </div>
     {% endif %}
 
-    {% if not task.status == 'Finished' %}
-        <form method="post", action="{% url 'jobs_engine:comment_view' task.id %}">
-            {% csrf_token %}
-            {{comment_form.as_p}}
-            <button type="submit">Submit</button>
-        </form>
+    {% if comments %}
+        <br>
+        <div class="float-left">
+            <h4>Comments:</h4>
+            <div class="container mt-3">
+                {% for comment in comments %}
+                    <div class="row">
+                        <div class="card p-3 mt-3">
+                            <div class="justify-content-between">
+                                <div class="user flex-row">
+                                    <span>
+                                        <small class="font-weight-bold text-primary">({{comment.type}})</small>
+                                        <small class="font-weight-bold">{{comment.text}}</small>
+                                    </span>
+                                </div>
+                                <small>{{comment.creation_date}}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+        </div>
     {% endif %}
 </body>
 </html>

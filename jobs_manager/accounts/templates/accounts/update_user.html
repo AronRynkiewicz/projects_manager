@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Update user</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        <form method="post", action="">
-            {{form.as_p}}
-            {{employee_form.as_p}}
-            {% csrf_token %}
-            <button type="submit">Update user</button>
-        </form>
+        <div class="centered">
+            <form method="post", action="">
+                {{form|crispy}}
+                {{employee_form|crispy}}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Update user</button><input type="button" class="btn btn-danger" value="Cancel" onclick="history.back()">
+            </form>
+        </div>
     </body>
 </html>

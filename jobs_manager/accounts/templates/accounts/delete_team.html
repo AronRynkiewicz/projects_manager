@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete team</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        <p>This action will permanently delete "{{team.team_name}}" team! Do you want to proceed?</p>
-            <form method="POST" action="">
-                {% csrf_token %}
-                <button type="submit">Delete team</button>
-            </form>
-            <a href="{% url 'accounts:manager_panel' %}">Cancel</a>
+        <div class="better_centered">
+            <h4>This action will permanently delete "{{team.team_name}}" team! Do you want to proceed?</h4>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete team</button><input type="button" class="btn btn-light" value="Cancel" onclick="history.back()">
+                </form>
+        </div>
     </body>
 </html>

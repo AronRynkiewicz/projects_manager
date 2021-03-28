@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Client panel</title>
+    {% include 'jobs_engine/main_links.html' %}
 </head>
-<body>
-    {% include 'accounts/logout.html' %}
-    <p>Hello {{client.profile.name}}!</p>
-    <a href="{% url 'jobs_engine:create_task' %}">Create new task</a><br>
-    Your tasks:
-    {% for task in tasks %}
-        Task name: {{task.task_name}} <br>
-        Status: {{task.status}} <br>
-        Task description: <br>
-        {{task.task_description|truncatechars:30}} <br>
-        More about task: <br><a href="{% url 'jobs_engine:single_task_view' task.id %}">View more</a><br><br>
-    {% endfor %}
-</body>
+    <body>
+        <div class="right_align">
+            <h3>Hello {{client.profile.name}}!</h3>
+            <a href="{% url 'jobs_engine:create_task' %}" class="btn btn-light">Create new task</a><br>
+            {% include 'accounts/logout.html' %}
+        </div>
+
+        {% include 'jobs_engine/main.html' %}
+    </body>
 </html>

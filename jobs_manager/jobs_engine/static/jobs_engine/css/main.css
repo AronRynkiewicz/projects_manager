@@ -1,0 +1,32 @@
+.right_align{
+    padding-top: 30px;
+    padding-right: 30px;
+    text-align: right;
+}
+
+.card{
+    color: black;
+}
+
+body{
+    padding-left: 30px;
+    color: white;
+    background-color: rgb(0, 0, 70);
+}
+
+.centered {
+    max-width: 500px;
+    margin: auto;
+}
+
+.better_centered {
+    vertical-align: middle;
+    text-align: center;
+    height: 400px;
+    width: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -100px;
+}

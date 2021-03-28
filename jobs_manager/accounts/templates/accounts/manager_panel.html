@@ -2,45 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
     <title>Manger panel</title>
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        {% include 'accounts/logout.html' %}
-        <div class="create_team">
-            <form method="post", action="{% url 'accounts:create_team'%}">
-              {% csrf_token %}
-              <button type="submit">Create team</button>
-            </form>
+        <div class="right_align">
+            {% include 'accounts/logout.html' %}
+            <a href="{% url 'accounts:create_team'%}" class="btn btn-light">Create team</a><br>
         </div>
         {% if available_tasks %}
-            Available Task(s): <br>
-            {% for task in available_tasks %}
-                Name: {{task.task_name}} <br>
-                <a href="{% url 'accounts:add_team' task.id %}">Join task</a><br>
-            {% endfor %}
+            <h4>Available Task(s):</h4>
+            <div class="row">
+                {% for task in available_tasks %}
+                    <div class="col-m-3 offset-1">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Name: {{task.task_name}}</h5>
+                            </div>
+                            <a href="{% url 'accounts:add_team' task.id %}" class="btn btn-primary">Join task</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        <hr/>
         {% endif %}
 
-        Your teams: <br>
-        {% for team in teams %}
-            Team name: {{team.0.team_name}} <br>
-            Members: <br>
-            {% for member in team.1 %}
-                Name: {{member.profile.name}} <br>
-                Surname: {{member.profile.surname}} <br>
+        <h4>Your teams:</h4>
+        <div class="row">
+            {% for team in teams %}
+              <div class="col-m-3 offset-1">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Team name: {{team.0.team_name}}</h5>
+                        Members: <br>
+                        <ul class="list-group">
+                            {% for member in team.1 %}
+                                <li class="list-group-item">{{member.profile.name}} {{member.profile.surname}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <a href="{% url 'accounts:update_team' team.0.id %}" class="btn btn-primary">Update team</a>
+                    <a href="{% url 'accounts:delete_team' team.0.id %}" class="btn btn-primary">Delete team</a>
+                </div>
+              </div>
             {% endfor %}
-            <a href="{% url 'accounts:update_team' team.0.id %}">Update team</a><br>
-            <a href="{% url 'accounts:delete_team' team.0.id %}">Delete team</a><br>
-        {% endfor %}
+        </div>
 
-        Your tasks: <br>
-        {% for task in tasks %}
-            Task name: {{task.task_name}} <br>
-            Status: {{task.status}} <br>
-            Team(s): <br>
-            {% for t in task.assigned_team.all %}
-                Name: {{t.team_name}} <br>
-            {% endfor %}
-            More about task: <br><a href="{% url 'jobs_engine:single_task_view' task.id %}">View more</a><br>
-        {% endfor %}
+        <hr/>
+        {% include 'jobs_engine/main.html' %}
     </body>
 </html>

@@ -107,7 +107,7 @@ def single_task_view(request, pk):
     file_form = None
     review_form = None
     comment_form = CommentForm()
-    comments = task.comments.all().order_by('creation_date')
+    comments = task.comments.all().order_by('-creation_date')
     finished_form = None
 
     try:

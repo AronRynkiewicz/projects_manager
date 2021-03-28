@@ -3,33 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin panel</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
 <body>
-{% include 'accounts/logout.html' %}
-Admin panel
-    <div class="create_user">
-        <form method="post", action="{% url 'accounts:create_user' %}">
-          {% csrf_token %}
-          <button type="submit">Create user</button>
-        </form>
+<h2>Admin panel</h2>
+    <div class="right_align">
+        <a href="{% url 'accounts:create_user' %}" class="btn btn-light">Create user</a><br>
+        {% include 'accounts/logout.html' %}
     </div>
-Clients: <br>
-{% for client in clients %}
-    Name: {{client.profile.name}} <br>
-    Surname: {{client.profile.surname}} <br>
-    <a href="{% url 'accounts:update_user' client.id %}">Update user</a><br>
-    <a href="{% url 'accounts:delete_user' client.id %}">Delete user</a><br>
-    ------------------------- <br>
-{% endfor %}
+<h4>Clients:</h4>
+<div class="row">
+                {% for task in available_tasks %}
+                    <div class="col-m-3 offset-1">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Name: {{task.task_name}}</h5>
+                            </div>
+                            <a href="{% url 'accounts:add_team' task.id %}" class="btn btn-primary">Join task</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+<div class="row">
+    {% for client in clients %}
+        <div class="col-m-3 offset-1">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Name: {{client.profile.name}} </h5>
+                    <h5 class="card-title">Surname: {{client.profile.surname}} </h5>
+                    <a href="{% url 'accounts:update_user' client.id %}" class="btn btn-primary">Update user</a>
+                    <a href="{% url 'accounts:delete_user' client.id %}" class="btn btn-danger">Delete user</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 
-Employees: <br>
-{% for employee in employees %}
-    Name: {{employee.profile.name}} <br>
-    Surname: {{employee.profile.surname}} <br>
-    Role: {{employee.position.position_name}} <br>
-    <a href="{% url 'accounts:update_user' employee.id %}">Update user</a><br>
-    <a href="{% url 'accounts:delete_user' employee.id %}">Delete user</a><br>
-    ------------------------- <br>
-{% endfor %}
+<h4>Employees: </h4>
+<div class="row">
+    {% for employee in employees %}
+        <div class="col-m-3 offset-1">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Name: {{employee.profile.name}} </h5>
+                    <h5 class="card-title">Surname: {{employee.profile.surname}} </h5>
+                    <h5 class="card-title">Role: {{employee.position.position_name}} </h5>
+                    <a href="{% url 'accounts:update_user' employee.id %}" class="btn btn-primary">Update user</a>
+                    <a href="{% url 'accounts:delete_user' employee.id %}" class="btn btn-danger">Delete user</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 </body>
 </html>

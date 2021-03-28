@@ -1,0 +1,21 @@
+
+<h3>Your tasks:</h3>
+<div class="row">
+    {% for task in tasks %}
+      <div class="col-m-3 offset-1">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Task name: {{task.task_name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Status: {{task.status}} </h6>
+                Task description: <br>
+                {{task.task_description|truncatechars:30}} <br>
+            </div>
+            <a href="{% url 'jobs_engine:single_task_view' task.id %}" class="btn btn-primary">View more</a>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

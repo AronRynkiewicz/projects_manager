@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Create team</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        <form method="post", action="{% url 'accounts:create_team' %}">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit">Create team</button>
-        </form>
+        <div class="centered">
+            <form method="post", action="{% url 'accounts:create_team' %}">
+                {% csrf_token %}
+                {{form|crispy}}
+                <button type="submit" class="btn btn-primary">Create team</button>
+            </form>
+        </div>
     </body>
 </html>

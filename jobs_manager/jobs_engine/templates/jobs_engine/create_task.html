@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Create task</title>
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        <form enctype="multipart/form-data", method="post", action="{% url 'jobs_engine:create_task' %}">
-            {{task_form.as_p}}
-            {{file_form.as_p}}
-            {% csrf_token %}
-            <button type="submit">Create task</button>
+        <form>
+            <input type="button" class="btn btn-light" value="Back" onclick="history.back()">
         </form>
+        <div class="centered">
+            <form enctype="multipart/form-data", method="post", action="{% url 'jobs_engine:create_task' %}">
+                {{task_form|crispy}}
+                {{file_form|crispy}}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-light">Create task</button>
+            </form>
+        </div>
     </body>
 </html>

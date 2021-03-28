@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Team</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        Task name: {{task.task_name}} <br><br>
-        Description: <br>
-        {{task.task_description}} <br>
-        <div class="add_team">
-            <form method="post", action="{% url 'accounts:add_team' task.id %}">
-                {% csrf_token %}
-                {{form.as_p}}
-                <button type="submit">Add team(s)</button>
-            </form>
+        <div class="centered">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Task name: {{task.task_name}}</h5>
+                    <h6>Description:</h6>
+                    {{task.task_description}}
+                    <form method="post", action="{% url 'accounts:add_team' task.id %}">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <button type="submit" class="btn btn-primary">Add team(s)</button><input type="button" class="btn btn-danger" value="Cancel" onclick="history.back()">
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

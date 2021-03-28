@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete user</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
 </head>
     <body>
-        <p>This action will permanently delete "{{profile_obj.name}} {{profile_obj.surname}}" user! Do you want to proceed?</p>
+        <div class="better_centered">
+            <h4>This action will permanently delete "{{profile_obj.name}} {{profile_obj.surname}}" user! Do you want to proceed?</h4>
             <form method="POST" action="">
                 {% csrf_token %}
-                <button type="submit">Delete user</button>
+                <button type="submit" class="btn btn-danger">Delete user</button><input type="button" class="btn btn-light" value="Cancel" onclick="history.back()">
             </form>
-            <a href="{% url 'accounts:admin_panel' %}">Cancel</a>
+        </div>
     </body>
 </html>
