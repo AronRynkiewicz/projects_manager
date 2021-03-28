@@ -10,8 +10,11 @@
     <a href="{% url 'jobs_engine:create_task' %}">Create new task</a><br>
     Your tasks:
     {% for task in tasks %}
-        Name: {{task.task_name}} <br>
+        Task name: {{task.task_name}} <br>
         Status: {{task.status}} <br>
+        Task description: <br>
+        {{task.task_description|truncatechars:30}} <br>
+        More about task: <br><a href="{% url 'jobs_engine:single_task_view' task.id %}">View more</a><br><br>
     {% endfor %}
 </body>
 </html>

@@ -35,10 +35,12 @@
         Your tasks: <br>
         {% for task in tasks %}
             Task name: {{task.task_name}} <br>
+            Status: {{task.status}} <br>
             Team(s): <br>
             {% for t in task.assigned_team.all %}
                 Name: {{t.team_name}} <br>
             {% endfor %}
+            More about task: <br><a href="{% url 'jobs_engine:single_task_view' task.id %}">View more</a><br>
         {% endfor %}
     </body>
 </html>

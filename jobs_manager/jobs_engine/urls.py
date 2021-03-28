@@ -11,4 +11,6 @@ urlpatterns = [
     path('tasks_view', views.tasks_view, name='tasks_view'),
     path('single_task_view/<str:pk>/', views.single_task_view, name='single_task_view'),
     path('download/<str:pk>/', views.download, name='download'),
+    path('comment_view/<str:pk>/', views.comment_view, name='comment_view'),
+    path('finished_view/<str:pk>/', views.finished_view, name='finished_view'),
 ]

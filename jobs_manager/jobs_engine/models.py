@@ -72,12 +72,26 @@ class File(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file_name = models.CharField(max_length=50)
-    creation_date = models.DateField(auto_now_add=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=20, choices=type_choices)
     file = models.FileField(upload_to='files/')
 
     def __str__(self):
         return '({}) {}'.format(self.type, self.file_name)
+
+
+class Comment(models.Model):
+    type_choices = (
+        ('Client\'s', 'Client\'s'),
+        ('Team\'s', 'Team\'s')
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=20, choices=type_choices)
+    text = models.TextField()
+
+    def __str__(self):
+        return '({}) comment | {}'.format(self.type, self.creation_date)
 
 
 class Task(models.Model):
@@ -96,6 +110,10 @@ class Task(models.Model):
     )
     files = models.ManyToManyField(
         File,
+    )
+
+    comments = models.ManyToManyField(
+        Comment,
     )
 
     def __str__(self):

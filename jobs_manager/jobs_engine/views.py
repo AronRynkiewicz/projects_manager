@@ -31,7 +31,6 @@ def client_view(request):
         return redirect('accounts:login')
 
     client = Client.objects.get(id=request.session.get('client_id'))
-    print(Task.objects.all())
     tasks = client.task.all()
 
     context = {
@@ -56,6 +55,7 @@ def create_task(request):
         if task_form.is_valid() and file_form.is_valid():
             file = file_form.save()
             file.type = 'Client\'s'
+            file.file_name = file.file.name
             file.save()
             task = task_form.save()
 
@@ -104,11 +104,95 @@ def single_task_view(request, pk):
         return redirect('accounts:login')
 
     task = Task.objects.get(id=pk)
+    file_form = None
+    review_form = None
+    comment_form = CommentForm()
+    comments = task.comments.all().order_by('creation_date')
+    finished_form = None
+
+    try:
+        employee_obj = Employee.objects.get(id=request.session.get('employee_id'))
+    except Exception:
+        employee_obj = None
+        finished_form = FinishedForm()
+
+    if employee_obj:
+        file_form = FileForm()
+        review_form = ReviewForm()
+
+    if request.method == 'POST' and employee_obj:
+        file_form = FileForm(request.POST, request.FILES)
+        review_form = ReviewForm(request.POST)
+
+        if file_form.is_valid() and review_form.is_valid():
+            file = file_form.save()
+            file.type = 'Team\'s'
+            file.file_name = file.file.name
+            file.save()
+
+            task.files.add(file)
+            task.save()
+
+            if review_form.cleaned_data['mark_for_review']:
+                task.status = 'For client review'
+                task.save()
+            return redirect('/')
 
     context = {
         'task': task,
+        'file_form': file_form,
+        'review_form': review_form,
+        'comment_form': comment_form,
+        'comments': comments,
+        'finished_form': finished_form,
     }
     return render(request, 'jobs_engine/single_task.html', context)
+
+
+def comment_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    task = Task.objects.get(id=pk)
+    employee_comment = False
+
+    try:
+        Employee.objects.get(id=request.session.get('employee_id'))
+        employee_comment = True
+    except Exception:
+        employee_comment = False
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save()
+            if employee_comment:
+                task.status = 'For client review'
+                comment.type = 'Team\'s'
+            else:
+                task.status = 'In progress'
+                comment.type = 'Client\'s'
+
+            task.save()
+            comment.save()
+            task.comments.add(comment)
+            task.save()
+        return redirect('/')
+
+
+def finished_view(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    task = Task.objects.get(id=pk)
+    if request.method == 'POST':
+        form = FinishedForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['finished']:
+                task.status = 'Finished'
+                task.save()
+
+            return redirect('/')
 
 
 def download(request, pk):
