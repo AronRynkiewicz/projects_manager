@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search user</title>
+    {% load static %}
+    {% include 'jobs_engine/main_links.html' %}
+    {% load crispy_forms_tags %}
+</head>
+    <body>
+        <form>
+            <input type="button" class="btn btn-light" value="Main page" onclick="location.href = '/';">
+        </form>
+        <div class="centered">
+            <form method="post", action="">
+                {{form|crispy}}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Search user</button>
+            </form>
+        </div>
+        {% if users %}
+            <h4>Users:</h4>
+            <div class="row">
+                {% for user in users %}
+                    <div class="col-m-3 offset-1">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Name: {{user.profile.name}} </h5>
+                                <h5 class="card-title">Surname: {{user.profile.surname}} </h5>
+                                <h5 class="card-title">Role: {{user.profile.role}} </h5>
+                                <a href="{% url 'accounts:update_user' user.id %}" class="btn btn-primary">Update user</a>
+                                <a href="{% url 'accounts:delete_user' user.id %}" class="btn btn-danger">Delete user</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </body>
+</html>

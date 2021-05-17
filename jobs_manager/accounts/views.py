@@ -229,6 +229,37 @@ def create_user(request):
         return redirect('/')
 
 
+def search_user(request):
+    if request.user.is_superuser:
+        form = SearchUserForm()
+        users = set()
+        if request.method == 'POST':
+            form = SearchUserForm(request.POST)
+            if form.is_valid():
+                name_or_surname = form.cleaned_data['name_or_surname']
+                clients = Client.objects.filter(profile__name__contains=name_or_surname)
+                for i in clients:
+                    users.add(i)
+                clients = Client.objects.filter(profile__surname__contains=name_or_surname)
+                for i in clients:
+                    users.add(i)
+
+                emps = Employee.objects.filter(profile__name__contains=name_or_surname)
+                for i in emps:
+                    users.add(i)
+
+                emps = Employee.objects.filter(profile__surname__contains=name_or_surname)
+                for i in emps:
+                    users.add(i)
+        context = {
+            'form': form,
+            'users': users,
+        }
+        return render(request, 'accounts/search_user.html', context)
+    else:
+        return redirect('/')
+
+
 def update_user(request, pk):
     if request.user.is_superuser:
         client = Client.objects.filter(id=pk)

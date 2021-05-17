@@ -54,3 +54,7 @@ class TeamAdditionForm(forms.Form):
         )
         super(TeamAdditionForm, self).__init__(*args, **kwargs)
         self.fields['teams'] = teams
+
+
+class SearchUserForm(forms.Form):
+    name_or_surname = forms.CharField(max_length=50)

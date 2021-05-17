@@ -11,6 +11,7 @@
 <h2>Admin panel</h2>
     <div class="right_align">
         <a href="{% url 'accounts:create_user' %}" class="btn btn-light">Create user</a><br>
+        <a href="{% url 'accounts:search_user' %}" class="btn btn-light">Search user</a><br>
         {% include 'accounts/logout.html' %}
     </div>
 <h4>Clients:</h4>
