@@ -13,7 +13,7 @@ There are 4 main roles in the system and each role means diffrent privileges:
 
 ![admin_panel](https://github.com/AronRynkiewicz/bazy_danych/blob/master/showcase/admin_panel.png)
 
-* Manager - main function of this role is to manage teams (adding and deleting employees). Manager can also asign team to given client's project. Also has privileges of employee. Below example of main manager's page.
+* Manager - main function of this role is to manage teams (adding and deleting employees). Manager can also assign team to given client's project. Also has privileges of employee. Below example of main manager's page.
 
 ![manager_panel](https://github.com/AronRynkiewicz/bazy_danych/blob/master/showcase/manager_view.png)
 
@@ -21,7 +21,7 @@ There are 4 main roles in the system and each role means diffrent privileges:
 
 ![employee_panel](https://github.com/AronRynkiewicz/bazy_danych/blob/master/showcase/employee_view.png)
 
-* Client - can add new project (task), add files to it and mark it as finished. Client can also comment project. Below example of main client's page and project (task) view.
+* Client - can add new project (task), add file to it and mark it as finished. Client can also comment project. Below example of main client's page and project's (task's) details view.
 
 ![client_panel](https://github.com/AronRynkiewicz/bazy_danych/blob/master/showcase/clients_view.png)
 
